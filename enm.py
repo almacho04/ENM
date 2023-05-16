@@ -7,6 +7,7 @@ from scipy.spatial.distance import cdist
 
 from .edge import Edge
 from .node import Node
+from .selection import Selection
 
 np.set_printoptions(suppress = True)
 
@@ -17,7 +18,7 @@ class ENM:
 		self.parse(pdb_obj, **kwargs)
 
 	def _reset(self):
-		self.selection = 'All'
+		self.selection = Selection('all')
 		self.atoms = []
 		self.nodes = None
 		self.hessian = None
@@ -79,16 +80,9 @@ class ENM:
 	def __repr__(self):
 		return self.info
 
-	@property
-	def selector(self):
-		return f'Selection of "{self.selection}" atoms'
-
-	def selector(self, value):
-		self.selection = value
-		if self.atoms[0].atom is not None:
-			self.nodes = [node for node in self.atoms if self._separator(node)]
-		else:
-			self.nodes = self.atoms
+	def selector(self, value, lambda_func = False):
+		self.selection = Selection(value, lambda_func)
+		self.nodes = [node for node in self.atoms if self.selection._separator(node)]
 
 	def getCoords(self):
 		if self.nodes is None:
@@ -116,16 +110,7 @@ class ENM:
 			self.hessian = self._buildHessian(self.getCoords(), **kwargs)
 		return self.hessian
 	
-
-
-
-
 	######################PRIVATE FUNCTIONS
-
-
-
-	def _separator(self, node):
-		return node.atom.get_id() == 'CA'
 
 	def _buildHessian(self, coordinateArray, **kwargs):
 		self.cutOff = kwargs.get('cutOff', 11)
