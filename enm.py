@@ -4,6 +4,7 @@ import numpy as np
 from Bio.PDB import PDBParser, Structure, Model, Chain, Residue, Atom
 from Bio.PDB.PDBParser import PDBParser
 from scipy.spatial.distance import cdist
+from scipy.spatial import Delaunay
 
 from .edge import Edge
 from .node import Node
@@ -124,6 +125,27 @@ class ENM:
 
 	def _adjacancyMatrix(self, coordinateArray):
 		return cdist(coordinateArray, coordinateArray) <= self.cutOff
+
+	def _adjacancyMatrixWithDelaunay(self, coordinateArray):
+		tri = Delaunay(coordinateArray)
+		matrix = tri.simplices
+
+		num_nodes = len(coordinateArray)
+
+		# Create an empty adjacency matrix
+		adjacency_matrix = np.zeros((num_nodes, num_nodes), dtype=int)
+
+		for row in matrix:
+			# Iterate over the four elements (nodes) in the row
+			for i in range(4):
+				for j in range(4):
+					# Mark the corresponding entries in the adjacency matrix as 1
+					adjacency_matrix[row[i], row[j]] = 1
+
+		print(matrix)
+
+		return adjacency_matrix
+
 
 	def _get_grad(self, adj):
 		Nb = int(np.sum(adj == 1) / 2)
