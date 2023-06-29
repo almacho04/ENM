@@ -68,7 +68,8 @@ attributes:
     
     Optional:
     edges - Adjacency matrix cache
-    
+```
+```sh 
 Node Class
 Flexible Bio.PDB.Atom class
 * All methods, attributes of Bio.PDB.Atom available
@@ -80,7 +81,8 @@ Extra property attributes:
     resname - Residue name
     residx - Residue id
     chain - Str chain
-
+```
+```sh
 ENM.Filter method:
     All attributes of Node are available
     All attributes of Residue are available
@@ -99,11 +101,13 @@ ENM.Filter method:
     idx_%RESIDUE_NAME%
         :Number of objects viewed before,
             same as num, but counts even not included
-
+```
+```sh
 Selection Class
     Used for creating lambda function for primitive script
     To view lambda script use .filter('CA and water', SHOW_SCRIPT = True)
-    
+```
+```sh 
 EXTENDER.py
     Add your own expressions to shorten script
     Ex:
