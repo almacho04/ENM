@@ -37,8 +37,8 @@ from enm import *
 a = ENM('1znw.pdb')
 b = ENM(a.filter('CA')) # Selection of Carbon Alpha atoms
 b = ENM(a.filter('_C')) # Selection of all Carbon atoms
-b = ENM(a.filter('_C and _N')) # Selection of all Carbon, Nitrogen atoms
-b = ENM(a.filter('CA and water')) # Selection of all Carbon atoms, water (HOH) molecules
+b = ENM(a.filter('_C or _N')) # Selection of all Carbon, Nitrogen atoms
+b = ENM(a.filter('CA or water')) # Selection of all Carbon atoms, water (HOH) molecules
 b = ENM(a.filter('VAL')) # Selection of all Valine residue atoms
 b = ENM(a.filter('_C and num < 10')) # Selection of all Carbon atoms, limited number of atoms to num
 b = ENM(a.filter('resid < 15')) # Selection of first 15 residue atoms
