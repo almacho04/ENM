@@ -27,6 +27,7 @@ a = ENM('1znw.pdb')
 ```python
 from enm import *
 a = ENM('1znw.pdb')
+a = a.filter('CA')
 b = ENM(a.getCoords())
 H = b.getHessian(adj = 'delaunay')
 ```
@@ -104,16 +105,13 @@ initializing:
             For Bio.PDB.PDBParser
             PERMISSIVE = True,
             QUIET = True,
-            is_pqr = False,
             Arguments:
                 - PERMISSIVE - bool, if false, exceptions in
                 constructing the SMCRA data structure are fatal. If true (DEFAULT),
                 the exceptions are caught, but some residues or atoms will be missing.
                 - QUIET - bool, if true (DEFAULT), warnings issued in constructing
                 the SMCRA data will be suppressed. If false, they will be shown.
-                - is_pqr - bool, specifies the type of file to be parsed.
-                If false (DEFAULT) a .pdb file format is assumed. Set it to true if you
-                want to parse a .pqr file instead.
+
 attributes:
     atoms - List of Bio.PDB.Atom
     info  - Information about Protein object
@@ -159,7 +157,7 @@ ENM.Filter method:
 ```sh
 Selection Class
     Used for creating lambda function for primitive script
-    To view lambda script use .filter('CA and water', SHOW_SCRIPT = True)
+    To view lambda script use .filter('CA or water', SHOW_SCRIPT = True)
 ```
 ```sh 
 EXTENDER.py
@@ -175,8 +173,6 @@ ENM.save:
             (Slow operation due to rewrite of file for writing log to the beggining of the file)
     rebuild (Optional) - Default False, bool to necessity to rebuild structure
                                 (necessary if ENM builded from NOT pdb file)
-    structure_name (Optional) - Sets structure name
-    model_name (Optional) - Sets model id
 
     to build/save from MutableObject it should have attributes --> :
             'coord', 'id', 'name', 'altloc', 'disordered_flag', 'element', 'fullname', 'bfactor', 'occupancy'
