@@ -54,14 +54,14 @@ class Selection:
 			flags.update(flags['residue'].__dict__)
 
 			# Assign "Residue name" variable to True
-			if hasattr(flags, 'resname'):
-				flags[flags.resname] = True
+			if flags['resname']:
+				flags[flags['resname']] = True
 		ans = bool(eval(self.script, flags))
 		cache['idx_elem' + node.element] = cache.get('idx_elem' + node.element, 0) + 1
 		cache['idx_' + node.name] = cache.get('idx_' + node.name, 0) + 1
-		cache['idx_' + flags.resname] = cache.get('idx_' + flags.resname, 0) + 1
+		cache['idx_' + flags['resname']] = cache.get('idx_' + flags['resname'], 0) + 1
 		if ans:
 			cache['num_elem' + node.element] = cache.get('num_elem' + node.element, 0) + 1
 			cache['num_' + node.name] = cache.get('num_' + node.name, 0) + 1
-			cache['num_' + flags.resname] = cache.get('num_' + flags.resname, 0) + 1
+			cache['num_' + flags['resname']] = cache.get('num_' + flags['resname'], 0) + 1
 		return ans

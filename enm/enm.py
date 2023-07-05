@@ -45,7 +45,7 @@ class ENM:
 		raise NotImplementedError(f'Please modify via ENM.atoms[{key}]')
 
 	# Easy to create other ENM class
-	def filter(self, filt, cache = None):
+	def filter(self, filt, cache = {}):
 		self.info += f' -> Filtering with script "{filt}"\n'
 		if not callable(filt):
 			filt = Selection(filt, cache)
