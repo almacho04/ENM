@@ -48,7 +48,7 @@ class ENM:
 	def filter(self, filt, cache = {}):
 		self.info += f' -> Filtering with script "{filt}"\n'
 		if not callable(filt):
-			filt = Selection(filt, cache)
+			filt = Selection(filt)
 		ans = list()
 		for node in self.atoms:
 			if filt(node, cache):

@@ -1,26 +1,27 @@
 import re
 import ast
 from .EXTENDER import EXTENDER
+DEFAULT_VALUE = False
 
 class Selection:
-	def __init__(self, script, cache = None):
-		# def_flags used to assign variable default value to False
-		# avoids ValueError for variables which are used in a script
-		self.def_flags = dict()
-
+	def __init__(self, script, SHOW_SCRIPT = False):
 		# Precompiling
 		# Convert all variables that in EXTENDER to its definition
-		self.script = self.translator(script)
+		script = self.translator(script)
 
 		# Define none existing variables to False
 		# Go throw variables
-		tree = ast.parse(self.script)
+		tree = ast.parse(script)
+		self.vars = list()
 		def traverse(node):
 			if isinstance(node, ast.Name):
-				self.def_flags[node.id] = False
+				self.vars.append(node.id)
 			for child_node in ast.iter_child_nodes(node):
 				traverse(child_node)
 		traverse(tree)
+		self.func = eval('lambda ' + ','.join(self.vars) + ': ' + script)
+		if SHOW_SCRIPT:
+			print('Filter --> lambda ' + ','.join(self.vars) + ': ' + script)
 
 	def translator(self, script):
 		tree = ast.parse(script)
@@ -33,7 +34,7 @@ class Selection:
 		return ast.unparse(tree)
 
 	def __call__(self, node, cache):
-		flags = {**self.def_flags}
+		flags = dict()
 
 		# Make Node, Atom attributes accessible from global
 		flags['node'] = node
@@ -56,7 +57,9 @@ class Selection:
 			# Assign "Residue name" variable to True
 			if flags['resname']:
 				flags[flags['resname']] = True
-		ans = bool(eval(self.script, flags))
+		# ans = bool(eval(self.script, flags))
+		args = list(map(lambda id: flags.get(id, DEFAULT_VALUE), self.vars))
+		ans = self.func(*args)
 		cache['idx_elem' + node.element] = cache.get('idx_elem' + node.element, 0) + 1
 		cache['idx_' + node.name] = cache.get('idx_' + node.name, 0) + 1
 		cache['idx_' + flags['resname']] = cache.get('idx_' + flags['resname'], 0) + 1
