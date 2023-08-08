@@ -1,5 +1,3 @@
-from turtle import distance
-
 import numpy as np
 
 from Bio.PDB import PDBIO, parse_pdb_header, Structure, Model, Chain, Residue, Atom 
@@ -41,13 +39,7 @@ class ENM:
 		self.dist_mat = self._calculate_dist_mat()
 
 	def _calculate_dist_mat(self):
-		coordinates = self.getCoords()
-		num_atoms = len(coordinates)
-		dist_mat = np.zeros((num_atoms, num_atoms))
-		for i in range(num_atoms):
-			for j in range(num_atoms):
-				dist_mat[i, j] = self.distance_function(coordinates[i], coordinates[j])
-		return dist_mat
+		return cdist(self.getCoords(), self.getCoords(), 'euclidean')
 
 	def __repr__(self):
 		return self.info
