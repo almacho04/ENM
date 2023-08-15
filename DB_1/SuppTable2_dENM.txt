@@ -1,0 +1,32 @@
+# Spring constants for the dENM
+# The first two columns correspond to the lower and upper boundaries of the distance interval (in Ang.)
+# The third column corresponds to the value of the spring constant in that distance interval
+# The two last columns corresponds to the bootstrap estimate of the 90% confidence interval on kappa(d)
+# Bonded interactions are described with a larger value of the spring constant (kappa = 46.83)
+[  0.0 ,  4.0 [     kappa(d)=  4.683    [  3.610 ,  5.717 ]
+[  4.0 ,  4.5 [     kappa(d)=  3.897    [  3.444 ,  4.381 ]
+[  4.5 ,  5.0 [     kappa(d)=  3.518    [  3.172 ,  3.965 ]
+[  5.0 ,  5.5 [     kappa(d)=  6.616    [  5.919 ,  7.261 ]
+[  5.5 ,  6.0 [     kappa(d)=  2.024    [  1.830 ,  2.249 ]
+[  6.0 ,  6.5 [     kappa(d)=  1.000    [  1.000 ,  1.000 ]
+[  6.5 ,  7.0 [     kappa(d)=  0.592    [  0.526 ,  0.671 ]
+[  7.0 ,  7.5 [     kappa(d)=  0.067    [  0.059 ,  0.078 ]
+[  7.5 ,  8.0 [     kappa(d)=  0.033    [  0.029 ,  0.038 ]
+[  8.0 ,  8.5 [     kappa(d)=  0.035    [  0.032 ,  0.038 ]
+[  8.5 ,  9.0 [     kappa(d)=  0.052    [  0.047 ,  0.057 ]
+[  9.0 ,  9.5 [     kappa(d)=  0.037    [  0.033 ,  0.042 ]
+[  9.5 , 10.0 [     kappa(d)=  0.042    [  0.038 ,  0.048 ]
+[ 10.0 , 10.5 [     kappa(d)=  0.034    [  0.030 ,  0.038 ]
+[ 10.5 , 11.0 [     kappa(d)=  0.020    [  0.018 ,  0.022 ]
+[ 11.0 , 11.5 [     kappa(d)=  0.013    [  0.012 ,  0.015 ]
+[ 11.5 , 12.0 [     kappa(d)=  0.010    [  0.009 ,  0.011 ]
+[ 12.0 , 12.5 [     kappa(d)=  0.008    [  0.007 ,  0.009 ]
+[ 12.5 , 13.0 [     kappa(d)=  0.006    [  0.006 ,  0.007 ]
+[ 13.0 , 13.5 [     kappa(d)=  0.005    [  0.004 ,  0.006 ]
+[ 13.5 , 14.0 [     kappa(d)=  0.004    [  0.004 ,  0.005 ]
+[ 14.0 , 14.5 [     kappa(d)=  0.003    [  0.003 ,  0.003 ]
+[ 14.5 , 15.0 [     kappa(d)=  0.002    [  0.002 ,  0.003 ]
+[ 15.0 , 15.5 [     kappa(d)=  0.002    [  0.002 ,  0.002 ]
+[ 15.5 , 16.0 [     kappa(d)=  0.001    [  0.001 ,  0.002 ]
+[ 16.0 , 16.5 [     kappa(d)=  0.001    [  0.001 ,  0.002 ]
+[ 16.5 ,  inf [     kappa(d)=  0.000    [  0.000 ,  0.000 ]
