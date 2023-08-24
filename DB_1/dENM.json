@@ -1,0 +1,299 @@
+[
+    {
+        "distance_interval": [
+            0.0,
+            4.0
+        ],
+        "kappa": 4.683,
+        "Confidence Interval": [
+            3.61,
+            5.717
+        ]
+    },
+    {
+        "distance_interval": [
+            4.0,
+            4.5
+        ],
+        "kappa": 3.897,
+        "Confidence Interval": [
+            3.444,
+            4.381
+        ]
+    },
+    {
+        "distance_interval": [
+            4.5,
+            5.0
+        ],
+        "kappa": 3.518,
+        "Confidence Interval": [
+            3.172,
+            3.965
+        ]
+    },
+    {
+        "distance_interval": [
+            5.0,
+            5.5
+        ],
+        "kappa": 6.616,
+        "Confidence Interval": [
+            5.919,
+            7.261
+        ]
+    },
+    {
+        "distance_interval": [
+            5.5,
+            6.0
+        ],
+        "kappa": 2.024,
+        "Confidence Interval": [
+            1.83,
+            2.249
+        ]
+    },
+    {
+        "distance_interval": [
+            6.0,
+            6.5
+        ],
+        "kappa": 1.0,
+        "Confidence Interval": [
+            1.0,
+            1.0
+        ]
+    },
+    {
+        "distance_interval": [
+            6.5,
+            7.0
+        ],
+        "kappa": 0.592,
+        "Confidence Interval": [
+            0.526,
+            0.671
+        ]
+    },
+    {
+        "distance_interval": [
+            7.0,
+            7.5
+        ],
+        "kappa": 0.067,
+        "Confidence Interval": [
+            0.059,
+            0.078
+        ]
+    },
+    {
+        "distance_interval": [
+            7.5,
+            8.0
+        ],
+        "kappa": 0.033,
+        "Confidence Interval": [
+            0.029,
+            0.038
+        ]
+    },
+    {
+        "distance_interval": [
+            8.0,
+            8.5
+        ],
+        "kappa": 0.035,
+        "Confidence Interval": [
+            0.032,
+            0.038
+        ]
+    },
+    {
+        "distance_interval": [
+            8.5,
+            9.0
+        ],
+        "kappa": 0.052,
+        "Confidence Interval": [
+            0.047,
+            0.057
+        ]
+    },
+    {
+        "distance_interval": [
+            9.0,
+            9.5
+        ],
+        "kappa": 0.037,
+        "Confidence Interval": [
+            0.033,
+            0.042
+        ]
+    },
+    {
+        "distance_interval": [
+            9.5,
+            10.0
+        ],
+        "kappa": 0.042,
+        "Confidence Interval": [
+            0.038,
+            0.048
+        ]
+    },
+    {
+        "distance_interval": [
+            10.0,
+            10.5
+        ],
+        "kappa": 0.034,
+        "Confidence Interval": [
+            0.03,
+            0.038
+        ]
+    },
+    {
+        "distance_interval": [
+            10.5,
+            11.0
+        ],
+        "kappa": 0.02,
+        "Confidence Interval": [
+            0.018,
+            0.022
+        ]
+    },
+    {
+        "distance_interval": [
+            11.0,
+            11.5
+        ],
+        "kappa": 0.013,
+        "Confidence Interval": [
+            0.012,
+            0.015
+        ]
+    },
+    {
+        "distance_interval": [
+            11.5,
+            12.0
+        ],
+        "kappa": 0.01,
+        "Confidence Interval": [
+            0.009,
+            0.011
+        ]
+    },
+    {
+        "distance_interval": [
+            12.0,
+            12.5
+        ],
+        "kappa": 0.008,
+        "Confidence Interval": [
+            0.007,
+            0.009
+        ]
+    },
+    {
+        "distance_interval": [
+            12.5,
+            13.0
+        ],
+        "kappa": 0.006,
+        "Confidence Interval": [
+            0.006,
+            0.007
+        ]
+    },
+    {
+        "distance_interval": [
+            13.0,
+            13.5
+        ],
+        "kappa": 0.005,
+        "Confidence Interval": [
+            0.004,
+            0.006
+        ]
+    },
+    {
+        "distance_interval": [
+            13.5,
+            14.0
+        ],
+        "kappa": 0.004,
+        "Confidence Interval": [
+            0.004,
+            0.005
+        ]
+    },
+    {
+        "distance_interval": [
+            14.0,
+            14.5
+        ],
+        "kappa": 0.003,
+        "Confidence Interval": [
+            0.003,
+            0.003
+        ]
+    },
+    {
+        "distance_interval": [
+            14.5,
+            15.0
+        ],
+        "kappa": 0.002,
+        "Confidence Interval": [
+            0.002,
+            0.003
+        ]
+    },
+    {
+        "distance_interval": [
+            15.0,
+            15.5
+        ],
+        "kappa": 0.002,
+        "Confidence Interval": [
+            0.002,
+            0.002
+        ]
+    },
+    {
+        "distance_interval": [
+            15.5,
+            16.0
+        ],
+        "kappa": 0.001,
+        "Confidence Interval": [
+            0.001,
+            0.002
+        ]
+    },
+    {
+        "distance_interval": [
+            16.0,
+            16.5
+        ],
+        "kappa": 0.001,
+        "Confidence Interval": [
+            0.001,
+            0.002
+        ]
+    },
+    {
+        "distance_interval": [
+            16.5,
+            Infinity
+        ],
+        "kappa": 0.0,
+        "Confidence Interval": [
+            0.0,
+            0.0
+        ]
+    }
+]
