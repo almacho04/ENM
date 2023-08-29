@@ -1,6 +1,6 @@
 import numpy as np
 
-from Bio.PDB import PDBIO, parse_pdb_header, Structure, Model, Chain, Residue, Atom 
+from Bio.PDB import PDBIO, parse_pdb_header, Structure, Model, Chain, Residue, Atom
 
 from scipy.spatial.distance import cdist
 from scipy.spatial import Delaunay
@@ -10,11 +10,17 @@ from .selection import Selection
 
 from .parser import ConvertToChainList
 
+import Bio.Data
+
+import Bio.Data.IUPACData as bdi
+
 import re
 
 class ENM:
 	def __init__(self, pdb_obj = None, **kwargs):
 		self.dist_mat = None
+		self.res_3_letter = []
+		self.res_1_letter = []
 		self.atoms = []
 		self.info = ' -> ENM Object\n'
 
@@ -31,7 +37,15 @@ class ENM:
 		try:
 			for chain in pdb_obj:
 				for residue in chain:
+					if not isinstance(residue, list):  # Check if the element is not a list
+						residue_3_letter_code = residue.resname  # Get the 3-letter code of the residue
 					for atom in residue:
+						if not isinstance(residue, list):
+							sr = residue_3_letter_code
+							self.res_3_letter.append(sr)
+
+							if sr != "HOH":
+								self.res_1_letter.append(bdi.protein_letters_3to1[sr.title()])
 						self.atoms.append(Node(atom))
 		except:
 			raise TypeError(f'Invalid type --> {type(pdb_obj)}')
