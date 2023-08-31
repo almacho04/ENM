@@ -32,6 +32,8 @@ class ENM:
 		db_1_folder = os.path.join(current_directory, '..', 'DB_1')
 		json_file_path_1 = os.path.join(db_1_folder, 'dENM.json')
 		json_file_path_2 = os.path.join(db_1_folder, 'sENM10.json')
+		json_file_path_3 = os.path.join(db_1_folder, 'sENM13.json')
+
 		# Indicates data type of a given pdb_obj
 
 		# Build from ENM instance
@@ -66,7 +68,11 @@ class ENM:
 		with open(json_file_path_2, 'r') as json_file:
 			self.senm10_data = json.load(json_file)
 
+		with open(json_file_path_3, 'r') as json_file:
+			self.senm13_data = json.load(json_file)
+
 		self.amino_acid_kappa_10 = {(entry['Amino Acid 1'], entry['Amino Acid 2']): entry['kappa'] for entry in self.senm10_data}
+		self.amino_acid_kappa_13 = {(entry['Amino Acid 1'], entry['Amino Acid 2']): entry['kappa'] for entry in self.senm13_data}
 
 	def _calculate_dist_mat(self):
 		return cdist(self.getCoords(), self.getCoords(), 'euclidean')
@@ -162,7 +168,10 @@ class ENM:
 		K_denm = self._get_K_dENM(adj,1)
 
 		#Example to create Kirhoff matrix with amino acid table
-		K_senm = self._get_K_sENM10(adj,1)
+		K_senm10 = self._get_K_sENM10(adj,1)
+
+		# Example to create Kirhoff matrix with amino acid table
+		K_senm13 = self._get_K_sENM13(adj, 1)
 
 		nij = self._get_nij(coordinateArray)
 		grad = self._get_grad(adj)
@@ -222,6 +231,12 @@ class ENM:
 
 	def _get_K_sENM10(self, adj, k0):
 		bonds = np.array([self.amino_acid_kappa_10.get((min(self.res_1_letter[i], self.res_1_letter[j]), max(self.res_1_letter[i], self.res_1_letter[j]))) for i, j in zip(*np.where(adj)) if i > j])
+		K_distance = np.zeros((len(bonds), len(bonds)))
+		np.fill_diagonal(K_distance, bonds)
+		return K_distance
+
+	def _get_K_sENM13(self, adj, k0):
+		bonds = np.array([self.amino_acid_kappa_13.get((min(self.res_1_letter[i], self.res_1_letter[j]), max(self.res_1_letter[i], self.res_1_letter[j]))) for i, j in zip(*np.where(adj)) if i > j])
 		K_distance = np.zeros((len(bonds), len(bonds)))
 		np.fill_diagonal(K_distance, bonds)
 		return K_distance
