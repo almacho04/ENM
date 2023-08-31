@@ -15,6 +15,8 @@ import Bio.Data
 import Bio.Data.IUPACData as bdi
 
 import re
+import json
+import os
 
 class ENM:
 	def __init__(self, pdb_obj = None, **kwargs):
@@ -24,6 +26,11 @@ class ENM:
 		self.atoms = []
 		self.info = ' -> ENM Object\n'
 
+		current_directory = os.path.dirname(__file__)
+
+		# Construct the path to the DB_1 folder and dENM.json file
+		db_1_folder = os.path.join(current_directory, '..', 'DB_1')
+		json_file_path = os.path.join(db_1_folder, 'dENM.json')
 		# Indicates data type of a given pdb_obj
 
 		# Build from ENM instance
@@ -51,6 +58,9 @@ class ENM:
 			raise TypeError(f'Invalid type --> {type(pdb_obj)}')
 
 		self.dist_mat = self._calculate_dist_mat()
+
+		with open(json_file_path, 'r') as json_file:
+			self.denm_data = json.load(json_file)
 
 	def _calculate_dist_mat(self):
 		return cdist(self.getCoords(), self.getCoords(), 'euclidean')
@@ -140,7 +150,9 @@ class ENM:
 		K = self._get_K_homo(adj, 1)
 
 		#Example to create Kirhoff matrix with exp dis dependence
-		K_exp_deis = self._get_K_exp_dist(adj,1)
+		K_exp_dist = self._get_K_exp_dist(adj,1)
+		# Example to create Kirhoff matrix with distance dependence
+		K_denm = self._get_K_dENM(adj,1)
 
 		nij = self._get_nij(coordinateArray)
 		grad = self._get_grad(adj)
@@ -181,6 +193,19 @@ class ENM:
 
 	def _get_K_exp_dist(self, adj, k0):
 		bonds = np.array([k0 * np.exp(-self.dist_mat[i][j]) for i, j in zip(*np.where(adj)) if i > j])
+		K_distance = np.zeros((len(bonds), len(bonds)))
+		np.fill_diagonal(K_distance, bonds)
+		return K_distance
+
+	def find_kappa_by_distance(self, distance):
+		for entry in self.denm_data:
+			interval_start, interval_end = entry['distance_interval']
+			if interval_start <= distance < interval_end:
+				return entry['kappa']
+		return None
+
+	def _get_K_dENM(self, adj, k0):
+		bonds = np.array([self.find_kappa_by_distance(self.dist_mat[i][j]) for i, j in zip(*np.where(adj)) if i > j])
 		K_distance = np.zeros((len(bonds), len(bonds)))
 		np.fill_diagonal(K_distance, bonds)
 		return K_distance
