@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from Bio.PDB import PDBIO, parse_pdb_header, Structure, Model, Chain, Residue, Atom
 
@@ -33,6 +34,7 @@ class ENM:
 		json_file_path_1 = os.path.join(db_1_folder, 'dENM.json')
 		json_file_path_2 = os.path.join(db_1_folder, 'sENM10.json')
 		json_file_path_3 = os.path.join(db_1_folder, 'sENM13.json')
+		json_file_path_4 = os.path.join(db_1_folder, 'sdENM.json')
 
 		# Indicates data type of a given pdb_obj
 
@@ -71,6 +73,7 @@ class ENM:
 		with open(json_file_path_3, 'r') as json_file:
 			self.senm13_data = json.load(json_file)
 
+		self.sdenm = pd.read_json(json_file_path_4)
 		self.amino_acid_kappa_10 = {(entry['Amino Acid 1'], entry['Amino Acid 2']): entry['kappa'] for entry in self.senm10_data}
 		self.amino_acid_kappa_13 = {(entry['Amino Acid 1'], entry['Amino Acid 2']): entry['kappa'] for entry in self.senm13_data}
 
@@ -173,6 +176,9 @@ class ENM:
 		# Example to create Kirhoff matrix with amino acid table
 		K_senm13 = self._get_K_sENM13(adj, 1)
 
+		# Example to create Kirhoff matrix with amino acid and distance table
+		K_sdenm = self._get_K_sdENM(adj, 1)
+
 		nij = self._get_nij(coordinateArray)
 		grad = self._get_grad(adj)
 		D = self._get_D(grad, nij)
@@ -237,6 +243,21 @@ class ENM:
 
 	def _get_K_sENM13(self, adj, k0):
 		bonds = np.array([self.amino_acid_kappa_13.get((min(self.res_1_letter[i], self.res_1_letter[j]), max(self.res_1_letter[i], self.res_1_letter[j]))) for i, j in zip(*np.where(adj)) if i > j])
+		K_distance = np.zeros((len(bonds), len(bonds)))
+		np.fill_diagonal(K_distance, bonds)
+		return K_distance
+
+	def find_kappa_by_distance_and_amino_acid(self, distance, res_i, res_j):
+		d1 = self.sdenm.loc[(self.sdenm['Amino Acid 1'] == res_i) & (self.sdenm['Amino Acid 2'] == res_j)]
+
+		for index, entry in d1.iterrows():
+			interval_start, interval_end = entry['distance_interval']
+			if interval_start <= distance < interval_end:
+				return entry['kappa']
+		return None
+
+	def _get_K_sdENM(self, adj, k0):
+		bonds = np.array([self.find_kappa_by_distance_and_amino_acid(self.dist_mat[i][j], min(self.res_1_letter[i], self.res_1_letter[j]), max(self.res_1_letter[i], self.res_1_letter[j])) for i, j in zip(*np.where(adj)) if i > j])
 		K_distance = np.zeros((len(bonds), len(bonds)))
 		np.fill_diagonal(K_distance, bonds)
 		return K_distance
