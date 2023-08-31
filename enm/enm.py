@@ -44,7 +44,7 @@ class ENM:
 							sr = residue_3_letter_code
 							self.res_3_letter.append(sr)
 
-							if sr != "HOH":
+							if sr != "HOH" and atom.name == 'CA':
 								self.res_1_letter.append(bdi.protein_letters_3to1[sr.title()])
 						self.atoms.append(Node(atom))
 		except:
