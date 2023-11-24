@@ -57,7 +57,19 @@ class ENM:
                             self.res_3_letter.append(sr)
 
                             if atom.name == 'CA':
-                                self.res_1_letter.append(bdi.protein_letters_3to1[sr.title()])
+                                # ! This is not a good way to do this
+                                # ! Find a better way to do this!
+                                if(sr.title() == "Cym" or sr.title() == "Cyx"):
+                                    self.res_1_letter.append(bdi.protein_letters_3to1["Cys"])
+                                elif(sr.title() == "Ocs"):
+                                    self.res_1_letter.append(bdi.protein_letters_3to1["Cys"])
+                                elif(sr.title() == "Hid"):
+                                    self.res_1_letter.append(bdi.protein_letters_3to1["His"])
+                                elif(sr.title() == "Nma" or sr.title() == "Nlm" or sr.title() == "Nag" or sr.title() == "Nbg"): # ! Especially this one
+                                    self.res_1_letter.append("X")
+                                else:
+                                    self.res_1_letter.append(bdi.protein_letters_3to1[sr.title()]) # * This is the correct way to do this, but it doesn't have all the residues
+                                
                         self.atoms.append(Node(atom))
         except:
             raise TypeError(f'Invalid type --> {type(pdb_obj)}')
@@ -233,11 +245,13 @@ class ENM:
         return K_distance
 
     def find_kappa_by_distance(self, distance):
+        # refer to ENM/get_median_kappa.py
+        default = 0.033
         for entry in self.denm_data:
             interval_start, interval_end = entry['distance_interval']
             if interval_start <= distance < interval_end:
                 return entry['kappa']
-        return None
+        return default
 
     def _get_K_dENM(self, adj, k0):
         bonds = np.array([self.find_kappa_by_distance(self.dist_mat[i][j]) for i, j in zip(*np.where(adj)) if i > j])
@@ -246,31 +260,46 @@ class ENM:
         return K_distance
 
     def _get_K_sENM10(self, adj, k0):
-        bonds = np.array([self.amino_acid_kappa_10.get((min(self.res_1_letter[i], self.res_1_letter[j]), max(self.res_1_letter[i], self.res_1_letter[j]))) for i, j in zip(*np.where(adj)) if i > j])
+        default = 0.911 # refer to ENM/get_median_kappa.py
+        bonds = np.array([self.amino_acid_kappa_10.get((min(self.res_1_letter[i], self.res_1_letter[j]), max(self.res_1_letter[i], self.res_1_letter[j])), default) for i, j in zip(*np.where(adj)) if i > j])
         K_distance = np.zeros((len(bonds), len(bonds)))
         np.fill_diagonal(K_distance, bonds)
         return K_distance
 
     def _get_K_sENM13(self, adj, k0):
-        bonds = np.array([self.amino_acid_kappa_13.get((min(self.res_1_letter[i], self.res_1_letter[j]), max(self.res_1_letter[i], self.res_1_letter[j]))) for i, j in zip(*np.where(adj)) if i > j])
+        default  = 0.913 # refer to ENM/get_median_kappa.py
+        bonds = np.array([self.amino_acid_kappa_13.get((min(self.res_1_letter[i], self.res_1_letter[j]), max(self.res_1_letter[i], self.res_1_letter[j])), default) for i, j in zip(*np.where(adj)) if i > j])
         K_distance = np.zeros((len(bonds), len(bonds)))
         np.fill_diagonal(K_distance, bonds)
         return K_distance
 
     def find_kappa_by_distance_and_amino_acid(self, distance, res_i, res_j):
-        d1 = self.sdenm.loc[(self.sdenm['Amino Acid 1'] == res_i) & (self.sdenm['Amino Acid 2'] == res_j)]
+        # d1 = self.sdenm.loc[(self.sdenm['Amino Acid 1'] == res_i) & (self.sdenm['Amino Acid 2'] == res_j)]
 
-        for index, entry in d1.iterrows():
-            interval_start, interval_end = entry['distance_interval']
-            if interval_start <= distance < interval_end:
-                return entry['kappa']
-        return None
+        # for index, entry in d1.iterrows():
+        #     interval_start, interval_end = entry['distance_interval']
+        #     if interval_start <= distance < interval_end:
+        #         return entry['kappa']
+        # return None
+        d1 = self.sdenm.loc[(self.sdenm['Amino Acid 1'] == res_i) & (self.sdenm['Amino Acid 2'] == res_j)]
+        if not d1.empty:
+            distance_mask = (d1['distance_interval'].apply(lambda x: x[0] <= distance < x[1]))
+            if distance_mask.any():
+                return d1.loc[distance_mask, 'kappa'].values[0]
+        return 0.014 # refer to ENM/get_median_kappa.py
+        
 
     def _get_K_sdENM(self, adj, k0):
+        
         bonds = np.array([self.find_kappa_by_distance_and_amino_acid(self.dist_mat[i][j], min(self.res_1_letter[i], self.res_1_letter[j]), max(self.res_1_letter[i], self.res_1_letter[j])) for i, j in zip(*np.where(adj)) if i > j])
+        
         K_distance = np.zeros((len(bonds), len(bonds)))
         np.fill_diagonal(K_distance, bonds)
         return K_distance
+        
+    
+        
+        
 
 
     ### Functions for building the Hessian
