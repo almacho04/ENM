@@ -2,8 +2,40 @@ import os
 import pickle
 import numpy as np
 from scipy.signal import convolve2d
+from sklearn.decomposition import PCA
+from scipy.linalg import sqrtm, eigh
+from scipy.stats import chi2
 
 # ! All functions are in alphabetical order ! #
+
+def bht_dist(covariance_matrix1, covariance_matrix2):
+    avg_covariance_matrix = (covariance_matrix1 + covariance_matrix2) / 2.0
+    eigenvalues, eigenvectors = eigh(avg_covariance_matrix)
+    
+    idx = np.argsort(eigenvalues)[::-1]
+    eigenvalues = eigenvalues[idx]
+    eigenvectors = eigenvectors[:, idx]
+    
+    cumulative_variance = np.cumsum(eigenvalues) / np.sum(eigenvalues)
+    q = np.argmax(cumulative_variance >= 0.95) + 1
+    principal_components = eigenvectors[:, :q]
+    
+    
+    proj_covariance_matrix1 = np.dot(np.dot(principal_components.T, covariance_matrix1), principal_components)
+    proj_covariance_matrix2 = np.dot(np.dot(principal_components.T, covariance_matrix2), principal_components)
+    
+    
+    avg_covariance_matrix_proj = (proj_covariance_matrix1 + proj_covariance_matrix2) / 2.0
+    
+    
+    det_term1 = np.linalg.det(avg_covariance_matrix_proj)
+    det_term2 = np.sqrt(np.abs(np.linalg.det(proj_covariance_matrix1) * np.linalg.det(proj_covariance_matrix2)))
+    print(f"det_term1: {det_term1}")
+    print(f"det_term2: {det_term2}")
+    
+    bhattacharyya_dist = 0.5 * np.log(det_term1 / det_term2)
+    
+    return bhattacharyya_dist
 
 def calculate_covariance_matrix(hessian):
     # Returns covariance matrix from hessian matrix
@@ -34,6 +66,7 @@ def format_colored(*args, color_code="31"):
     # Returns a string with the arguments formatted with the color code
     formatted_args = [f"\033[{color_code}m{arg}\033[0m" for arg in args]
     return " ".join(formatted_args)
+
 
 
 def get_coords(u, nmax=0):
@@ -96,6 +129,9 @@ def get_rmsf(coord_traj):
     rmsf = np.sum(disp_xyz**2, axis=(0,2)) / (len(disp_xyz) - 1)
     return rmsf
 
+def norm_cov(cov):
+    trace_cov = np.trace(cov)
+    return cov / trace_cov
 
 def regularize_covariance(cov):
     cov = convolve2d(cov, np.ones(9).reshape(3,3), mode='valid')[::3,::3]
@@ -115,6 +151,7 @@ def save_universe_as_pickle(u, filename, directory):
 
 def standardize(matrix):
     # Returns a standardized matrix
+    matrix = np.triu(matrix, k=1)
     mean = np.mean(matrix)
     std_dev = np.std(matrix)
     standardized_matrix = (matrix - mean) / std_dev

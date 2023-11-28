@@ -1,20 +1,15 @@
+
+# ! Just an example code for one protein 
 from enm import *
 from prody import *
 from pylab import *
-import pickle
 from MDAnalysis import *
-from MDAnalysis.analysis.gnm import GNMAnalysis as GNM
 from MDAnalysis.analysis.encore.covariance import covariance_matrix
 from MDAnalysis.analysis import align
 from MDAnalysis import transformations
 from multiprocessing import cpu_count
-from multiprocessing import Pool
-from functools import partial
-from sklearn.preprocessing import MinMaxScaler
 
 import numpy as np
-from scipy.spatial.distance import mahalanobis
-from scipy.linalg import eig
 import matplotlib.pyplot as plt
 import argparse
 import os
