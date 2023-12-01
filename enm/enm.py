@@ -59,9 +59,7 @@ class ENM:
                             if atom.name == 'CA':
                                 # ! This is not a good way to do this
                                 # ! Find a better way to do this!
-                                if(sr.title() == "Cym" or sr.title() == "Cyx"):
-                                    self.res_1_letter.append(bdi.protein_letters_3to1["Cys"])
-                                elif(sr.title() == "Ocs"):
+                                if(sr.title() == "Cym" or sr.title() == "Cyx" or sr.title() =="Ocs"):
                                     self.res_1_letter.append(bdi.protein_letters_3to1["Cys"])
                                 elif(sr.title() == "Hid"):
                                     self.res_1_letter.append(bdi.protein_letters_3to1["His"])
@@ -120,6 +118,8 @@ class ENM:
 
     def getCoords(self):
         return np.array([node.coord for node in self.atoms])
+    def numAtoms(self):
+        return len(self.atoms)
 
     def save(self, filename, save_infos = True, rebuild = False):
         io = PDBIO()
